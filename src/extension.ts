@@ -12,10 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
             context.subscriptions.push(
                 vscode.workspace.onDidChangeTextDocument(event => {
                     if (event.document.uri === uri) {
-                        let keymap = event.document.getText();
-                        if (keymap !== avoidResendCycleKeymapText) {
-                            sendKeymapToPreview(uri, keymap);
-                        }
+                        sendKeymapToPreview(event.document);
                     }
                 })
             );
@@ -24,8 +21,12 @@ export function activate(context: vscode.ExtensionContext) {
         public provideTextDocumentContent(): string | Thenable<string> {
             return new Promise(resolve => {
                 let indexFile = context.asAbsolutePath("out/qmkmapper/index.html");
-                let urlStart = vscode.Uri.file(context.asAbsolutePath("out/qmkmapper/"));
-                fs.readFile(indexFile, "utf8", (err, data) => {
+                let urlStart =
+                    vscode.Uri
+                        .file(context.asAbsolutePath(path.join("out", "qmkmapper")))
+                        .toString() + "/";
+                fs.readFile(indexFile, "UTF-8", (err, data) => {
+                    data = data.replace("//extension-settings", 'window["VSC_MODE"] = true;');
                     data = data.replace(/src="/g, 'src="' + urlStart);
                     data = data.replace(/href="/g, 'href="' + urlStart);
                     resolve(data);
@@ -33,10 +34,6 @@ export function activate(context: vscode.ExtensionContext) {
             });
         }
     }
-
-    const getUrl = (file: string) => {
-        return vscode.Uri.file(context.asAbsolutePath(file)).toString();
-    };
 
     let provider: TextDocumentContentProvider;
 
@@ -80,18 +77,20 @@ export function activate(context: vscode.ExtensionContext) {
 
     let throttleTimeout: NodeJS.Timer = null;
 
-    const sendKeymapToPreview = (documentUri: vscode.Uri, keymap: string) => {
-        // Throttle assumes that documentUri does not change
+    const sendKeymapToPreview = (document: vscode.TextDocument) => {
         if (throttleTimeout) {
             clearTimeout(throttleTimeout);
         }
         throttleTimeout = setTimeout(() => {
-            sendToPreview({
-                command: "setKeymap",
-                documentUri: documentUri.toString(),
-                keymap,
-            });
-        }, 300);
+            let keymap = document.getText();
+            if (keymap !== avoidResendCycleKeymapText) {
+                avoidResendCycleKeymapText = keymap;
+                sendToPreview({
+                    command: "setKeymap",
+                    keymap,
+                });
+            }
+        }, 1000); // Throttle time must be long enough so that held key does not fail
     };
 
     // Recieved messages
@@ -105,7 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
             if (provider) {
                 for (const editor of vscode.window.visibleTextEditors) {
                     if (editor.document.uri.toString() === provider.uri.toString()) {
-                        sendKeymapToPreview(provider.uri, editor.document.getText());
+                        sendKeymapToPreview(editor.document);
                     }
                 }
             }

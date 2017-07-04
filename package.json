@@ -40,14 +40,18 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "tsc -p ./",
+        "clean": "rimraf out/*",
+        "qmkmapper": "npm run build --prefix ../qmkmapper/ && ncp ../qmkmapper/build ./out/qmkmapper",
+        "vscode:prepublish": "npm run clean && tsc -p ./ && npm run qmkmapper ",
         "compile": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
         "tslint": "tslint -c tslint.json src/extension.ts"
     },
     "devDependencies": {
+        "@types/node": "*",
+        "ncp": "^2.0.0",
+        "rimraf": "^2.6.1",
         "typescript": "^2.1.4",
-        "vscode": "^1.0.0",
-        "@types/node": "*"
+        "vscode": "^1.0.0"
     }
 }
