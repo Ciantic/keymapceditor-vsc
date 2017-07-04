@@ -3,7 +3,7 @@
     "displayName": "QMKMapper editor for Visual Studio Code",
     "description": "",
     "version": "0.1.0",
-    "publisher": "eg2",
+    "publisher": "Ciantic",
     "galleryBanner": {
         "color": "#5c2d91",
         "theme": "dark"
