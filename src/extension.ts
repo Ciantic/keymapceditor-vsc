@@ -28,7 +28,6 @@ export function activate(context: vscode.ExtensionContext) {
                 fs.readFile(indexFile, "utf8", (err, data) => {
                     data = data.replace(/src="/g, 'src="' + urlStart);
                     data = data.replace(/href="/g, 'href="' + urlStart);
-                    console.log("data", data);
                     resolve(data);
                 });
             });
