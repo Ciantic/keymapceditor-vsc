@@ -1,0 +1,14 @@
+{
+    "editor.formatOnSave": true,
+    "prettier.tabWidth": 4,
+    "prettier.typescriptEnable": ["typescript", "typescriptreact"],
+    "prettier.trailingComma": "es5",
+    "prettier.printWidth": 100,
+    "files.exclude": {
+        "out": false
+    },
+    "search.exclude": {
+        "out": true
+    },
+    "typescript.tsdk": "./node_modules/typescript/lib"
+}
