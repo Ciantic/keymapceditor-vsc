@@ -21,22 +21,35 @@
     "engines": {
         "vscode": "^1.13.1"
     },
-    "activationEvents": ["onCommand:extension.showQmkMapperKeymapPreview"],
+    "activationEvents": ["onCommand:qmkmapper.showQmkMapperKeymapPreview"],
     "main": "./out/extension",
     "contributes": {
         "commands": [
             {
-                "command": "extension.showQmkMapperKeymapPreview",
+                "command": "qmkmapper.showQmkMapperKeymapPreview",
                 "title": "QMKMapper keymap.c preview"
             }
         ],
         "menus": {
             "editor/title": [
                 {
-                    "command": "extension.showQmkMapperKeymapPreview",
+                    "command": "qmkmapper.showQmkMapperKeymapPreview",
                     "when": "resourceLangId == c"
                 }
             ]
+        },
+
+        "configuration": {
+            "type": "object",
+            "title": "Markdown",
+            "order": 20,
+            "properties": {
+                "qmkmapper._urlPrefix": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Development feature, URL prefix for the iframe/webhost in preview"
+                }
+            }
         }
     },
     "scripts": {

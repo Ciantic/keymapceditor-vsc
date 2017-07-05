@@ -6,11 +6,17 @@
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-            "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
+            "args": [
+                "${workspaceRoot}/testworkspace/",
+                "--extensionDevelopmentPath=${workspaceRoot}"
+            ],
             "stopOnEntry": false,
             "sourceMaps": true,
             "outFiles": ["${workspaceRoot}/out/src/**/*.js"],
-            "preLaunchTask": "npm"
+            "preLaunchTask": "npm",
+            "env": {
+                "NODE_ENV": "development"
+            }
         },
         {
             "name": "Launch Tests",
