@@ -2,7 +2,7 @@
     "name": "qmkmapper-vsc",
     "displayName": "QMKMapper keymap.c viewer and editor",
     "description": "GUI and a visualizer to edit keymap.c files of the QMK Firmaware",
-    "version": "0.5.1",
+    "version": "0.6.2",
     "publisher": "Ciantic",
     "galleryBanner": {
         "color": "#5c2d91",
