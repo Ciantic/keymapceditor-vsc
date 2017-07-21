@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     class TextDocumentContentProvider implements vscode.TextDocumentContentProvider {
         constructor(public uri: vscode.Uri) {
-            console.log("created a new preview", uri.toString());
+            // this leaks when destroying TextDocumentContentProvider
             context.subscriptions.push(
                 vscode.workspace.onDidChangeTextDocument(event => {
                     if (event.document.uri.toString() === uri.toString()) {
@@ -37,7 +37,6 @@ export function activate(context: vscode.ExtensionContext) {
             context.subscriptions.push(
                 vscode.workspace.onDidOpenTextDocument(document => {
                     if (document.uri.toString() === uri.toString()) {
-                        console.log("resending a document as opened");
                         sendKeymapToPreview(document);
                     }
                 })
@@ -144,11 +143,19 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.commands.registerCommand("_qmkmapper.save", (payload: { uri: string }) => {
             let uri = vscode.Uri.parse(payload.uri);
-            console.log("save", uri);
             vscode.workspace.openTextDocument(uri).then(doc => {
-                console.log("did save", uri);
                 doc.save();
             });
+        })
+    );
+
+    let provider: TextDocumentContentProvider | null = null;
+
+    context.subscriptions.push(
+        vscode.workspace.onDidCloseTextDocument(document => {
+            if (document.uri.toString() === previewUri.toString()) {
+                provider = null;
+            }
         })
     );
 
@@ -159,9 +166,11 @@ export function activate(context: vscode.ExtensionContext) {
                 // TODO: Throw error that active editor must be keymap.c?
                 return;
             }
-            let provider = new TextDocumentContentProvider(
-                vscode.window.activeTextEditor.document.uri
-            );
+            if (provider !== null) {
+                // TODO: Throw error that there is already qmkmapper there
+                return;
+            }
+            provider = new TextDocumentContentProvider(vscode.window.activeTextEditor.document.uri);
             context.subscriptions.push(
                 vscode.workspace.registerTextDocumentContentProvider("qmkmapper-vsc", provider)
             );
