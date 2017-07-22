@@ -1,9 +1,10 @@
 {
     "name": "qmkmapper-vsc",
     "displayName": "QMKMapper keymap.c viewer and editor",
-    "description": "GUI and a visualizer to edit keymap.c files of the QMK Firmaware",
+    "description": "Edit and preview your QMK Firmware keymap.c using a GUI.",
     "version": "0.6.3",
     "publisher": "Ciantic",
+    "license": "MIT",
     "galleryBanner": {
         "color": "#5c2d91",
         "theme": "dark"
@@ -19,7 +20,7 @@
     "homepage": "",
     "categories": ["Other"],
     "engines": {
-        "vscode": "^1.13.1"
+        "vscode": "^1.14.1"
     },
     "activationEvents": ["onCommand:qmkmapper.showQmkMapperKeymapPreview"],
     "main": "./out/extension",

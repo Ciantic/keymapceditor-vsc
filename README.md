@@ -1,4 +1,4 @@
-# QMKMapper Visual Studio Extension
+# QMKMapper VSCode Extension
 
 Allows to preview and edit [QMK Firmaware](https://github.com/qmk/qmk_firmware) keymap.c files from VSCode.
 
