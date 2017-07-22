@@ -4,22 +4,22 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 
-class QmkMapperConfiguration {
+class KeymapCEditorConfiguration {
     public static getCurrentConfig() {
-        return new QmkMapperConfiguration();
+        return new KeymapCEditorConfiguration();
     }
 
     public readonly _previewUrlPrefix: string;
 
     private constructor() {
-        const configRoot = vscode.workspace.getConfiguration("qmkmapper");
+        const configRoot = vscode.workspace.getConfiguration("keymapceditor");
         this._previewUrlPrefix = configRoot.get<string>("_previewUrlPrefix", "");
     }
 }
 
 export function activate(context: vscode.ExtensionContext) {
-    let previewUri = vscode.Uri.parse("qmkmapper-vsc://preview");
-    let config = QmkMapperConfiguration.getCurrentConfig();
+    let previewUri = vscode.Uri.parse("keymapceditor-vsc://preview");
+    let config = KeymapCEditorConfiguration.getCurrentConfig();
     let avoidResendCycleKeymapText = "";
     let throttleTimeout: NodeJS.Timer = null;
 
@@ -53,10 +53,10 @@ export function activate(context: vscode.ExtensionContext) {
 
         public provideTextDocumentContent(): string | Thenable<string> {
             return new Promise(resolve => {
-                let indexFile = context.asAbsolutePath("out/qmkmapper/index.html");
+                let indexFile = context.asAbsolutePath("out/keymapceditor/index.html");
                 let urlPrefix =
                     vscode.Uri
-                        .file(context.asAbsolutePath(path.join("out", "qmkmapper")))
+                        .file(context.asAbsolutePath(path.join("out", "keymapceditor")))
                         .toString() + "/";
 
                 if (config._previewUrlPrefix) {
@@ -104,7 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Recieved messages
     context.subscriptions.push(
-        vscode.commands.registerCommand("_qmkmapper.logging", (payload: any) => {
+        vscode.commands.registerCommand("_keymapceditor.logging", (payload: any) => {
             if ("development" === process.env.NODE_ENV) {
                 console.log("preview log: ", payload);
             }
@@ -112,7 +112,7 @@ export function activate(context: vscode.ExtensionContext) {
     );
     context.subscriptions.push(
         vscode.commands.registerCommand(
-            "_qmkmapper.connectedPreview",
+            "_keymapceditor.connectedPreview",
             (payload: { uri: string }) => {
                 vscode.workspace.openTextDocument(vscode.Uri.parse(payload.uri)).then(f => {
                     sendKeymapToPreview(f, true);
@@ -122,7 +122,7 @@ export function activate(context: vscode.ExtensionContext) {
     );
     context.subscriptions.push(
         vscode.commands.registerCommand(
-            "_qmkmapper.keymapFromPreview",
+            "_keymapceditor.keymapFromPreview",
             (payload: { uri: string; keymap: string }) => {
                 avoidResendCycleKeymapText = payload.keymap;
                 let uri = vscode.Uri.parse(payload.uri);
@@ -141,7 +141,7 @@ export function activate(context: vscode.ExtensionContext) {
         )
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("_qmkmapper.save", (payload: { uri: string }) => {
+        vscode.commands.registerCommand("_keymapceditor.save", (payload: { uri: string }) => {
             let uri = vscode.Uri.parse(payload.uri);
             vscode.workspace.openTextDocument(uri).then(doc => {
                 doc.save();
@@ -161,18 +161,18 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Opens the preview
     context.subscriptions.push(
-        vscode.commands.registerCommand("qmkmapper.showQmkMapperKeymapPreview", () => {
+        vscode.commands.registerCommand("keymapceditor.showKeymapCEditor", () => {
             if (!vscode.window.activeTextEditor) {
                 // TODO: Throw error that active editor must be keymap.c?
                 return;
             }
             if (provider !== null) {
-                // TODO: Throw error that there is already qmkmapper there
+                // TODO: Throw error that there is already keymapceditor there
                 return;
             }
             provider = new TextDocumentContentProvider(vscode.window.activeTextEditor.document.uri);
             context.subscriptions.push(
-                vscode.workspace.registerTextDocumentContentProvider("qmkmapper-vsc", provider)
+                vscode.workspace.registerTextDocumentContentProvider("keymapceditor-vsc", provider)
             );
 
             return vscode.commands
@@ -180,7 +180,7 @@ export function activate(context: vscode.ExtensionContext) {
                     "vscode.previewHtml",
                     previewUri,
                     vscode.ViewColumn.Two,
-                    "QMKMapper keymap.c preview",
+                    "KeymapCEditor keymap.c editor",
                     { allowScripts: true, allowSvgs: true }
                 )
                 .then(

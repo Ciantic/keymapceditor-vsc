@@ -1,7 +1,7 @@
 {
-    "name": "qmkmapper-vsc",
-    "displayName": "QMKMapper keymap.c viewer and editor",
-    "description": "Edit and preview your QMK Firmware keymap.c using a GUI.",
+    "name": "keymapceditor-vsc",
+    "displayName": "KeymapCEditor keymap.c viewer and editor",
+    "description": "Edit and preview your QMK Firmware keymap.c files using a GUI.",
     "version": "0.6.4",
     "publisher": "Ciantic",
     "license": "MIT",
@@ -16,26 +16,26 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/Ciantic/qmkmapper-vsc"
+        "url": "https://github.com/Ciantic/keymapceditor-vsc"
     },
     "homepage": "",
     "categories": ["Other"],
     "engines": {
         "vscode": "^1.14.1"
     },
-    "activationEvents": ["onCommand:qmkmapper.showQmkMapperKeymapPreview"],
+    "activationEvents": ["onCommand:keymapceditor.showKeymapCEditor"],
     "main": "./out/extension",
     "contributes": {
         "commands": [
             {
-                "command": "qmkmapper.showQmkMapperKeymapPreview",
-                "title": "QMKMapper keymap.c preview"
+                "command": "keymapceditor.showKeymapCEditor",
+                "title": "Show KeymapCEditor keymap.c editor"
             }
         ],
         "menus": {
             "editor/title": [
                 {
-                    "command": "qmkmapper.showQmkMapperKeymapPreview",
+                    "command": "keymapceditor.showKeymapCEditor",
                     "when": "resourceLangId == c"
                 }
             ]
@@ -46,7 +46,7 @@
             "title": "Markdown",
             "order": 20,
             "properties": {
-                "qmkmapper._urlPrefix": {
+                "keymapceditor._urlPrefix": {
                     "type": "string",
                     "default": "",
                     "description": "Development feature, URL prefix for the iframe/webhost in preview"
@@ -56,8 +56,8 @@
     },
     "scripts": {
         "clean": "rimraf out/*",
-        "qmkmapper": "npm run build --prefix ../qmkmapper/ && ncp ../qmkmapper/build ./out/qmkmapper",
-        "vscode:prepublish": "npm run clean && tsc -p ./ && npm run qmkmapper ",
+        "keymapceditor": "npm run build --prefix ../keymapceditor/ && ncp ../keymapceditor/build ./out/keymapceditor",
+        "vscode:prepublish": "npm run clean && tsc -p ./ && npm run keymapceditor ",
         "compile": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
         "tslint": "tslint -c tslint.json src/extension.ts"
