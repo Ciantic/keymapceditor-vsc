@@ -2,7 +2,7 @@
     "name": "keymapceditor-vsc",
     "displayName": "KeymapCEditor - keymap.c viewer and editor",
     "description": "Edit and preview your QMK Firmware keymap.c files using a GUI.",
-    "version": "0.6.5",
+    "version": "0.6.6",
     "publisher": "Ciantic",
     "license": "MIT",
     "icon": "images/1999calleditwantsitsiconback.png",
@@ -40,7 +40,6 @@
                 }
             ]
         },
-
         "configuration": {
             "type": "object",
             "title": "Markdown",
@@ -49,14 +48,16 @@
                 "keymapceditor._urlPrefix": {
                     "type": "string",
                     "default": "",
-                    "description": "Development feature, URL prefix for the iframe/webhost in preview"
+                    "description":
+                        "Development feature, URL prefix for the iframe/webhost in preview"
                 }
             }
         }
     },
     "scripts": {
         "clean": "rimraf out/*",
-        "keymapceditor": "npm run build --prefix ../keymapceditor/ && ncp ../keymapceditor/build ./out/keymapceditor",
+        "keymapceditor":
+            "npm run build --prefix ../keymapceditor/ && ncp ../keymapceditor/build ./out/keymapceditor",
         "vscode:prepublish": "npm run clean && tsc -p ./ && npm run keymapceditor ",
         "compile": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
@@ -68,5 +69,10 @@
         "rimraf": "^2.6.1",
         "typescript": "^2.1.4",
         "vscode": "^1.0.0"
+    },
+    "__metadata": {
+        "id": "f754d8fa-f997-4887-bbae-ea7ca05db557",
+        "publisherDisplayName": "Ciantic",
+        "publisherId": "69d4b753-5a2c-456e-8681-e4188995b3ab"
     }
 }
