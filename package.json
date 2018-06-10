@@ -2,7 +2,7 @@
     "name": "keymapceditor-vsc",
     "displayName": "KeymapCEditor - keymap.c viewer and editor",
     "description": "Edit and preview your QMK Firmware keymap.c files using a GUI.",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "publisher": "Ciantic",
     "license": "MIT",
     "icon": "images/1999calleditwantsitsiconback.png",
