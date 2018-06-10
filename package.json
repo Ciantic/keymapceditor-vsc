@@ -2,7 +2,7 @@
     "name": "keymapceditor-vsc",
     "displayName": "KeymapCEditor - keymap.c viewer and editor",
     "description": "Edit and preview your QMK Firmware keymap.c files using a GUI.",
-    "version": "0.6.6",
+    "version": "0.7.0",
     "publisher": "Ciantic",
     "license": "MIT",
     "icon": "images/1999calleditwantsitsiconback.png",
@@ -19,11 +19,15 @@
         "url": "https://github.com/Ciantic/keymapceditor-vsc"
     },
     "homepage": "",
-    "categories": ["Other"],
+    "categories": [
+        "Other"
+    ],
     "engines": {
         "vscode": "^1.14.1"
     },
-    "activationEvents": ["onCommand:keymapceditor.showKeymapCEditor"],
+    "activationEvents": [
+        "onCommand:keymapceditor.showKeymapCEditor"
+    ],
     "main": "./out/extension",
     "contributes": {
         "commands": [
@@ -48,16 +52,14 @@
                 "keymapceditor._urlPrefix": {
                     "type": "string",
                     "default": "",
-                    "description":
-                        "Development feature, URL prefix for the iframe/webhost in preview"
+                    "description": "Development feature, URL prefix for the iframe/webhost in preview"
                 }
             }
         }
     },
     "scripts": {
         "clean": "rimraf out/*",
-        "keymapceditor":
-            "npm run build --prefix ../keymapceditor/ && ncp ../keymapceditor/build ./out/keymapceditor",
+        "keymapceditor": "npm run build --prefix ../keymapceditor/ && ncp ../keymapceditor/build ./out/keymapceditor",
         "vscode:prepublish": "npm run clean && tsc -p ./ && npm run keymapceditor ",
         "compile": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
