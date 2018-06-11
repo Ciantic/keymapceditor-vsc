@@ -1,5 +1,3 @@
-"use strict";
-
 import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
@@ -55,9 +53,9 @@ export function activate(context: vscode.ExtensionContext) {
             return new Promise(resolve => {
                 let indexFile = context.asAbsolutePath("out/keymapceditor/index.html");
                 let urlPrefix =
-                    vscode.Uri
-                        .file(context.asAbsolutePath(path.join("out", "keymapceditor")))
-                        .toString() + "/";
+                    vscode.Uri.file(
+                        context.asAbsolutePath(path.join("out", "keymapceditor"))
+                    ).toString() + "/";
 
                 if (config._previewUrlPrefix) {
                     urlPrefix = config._previewUrlPrefix;
@@ -67,9 +65,9 @@ export function activate(context: vscode.ExtensionContext) {
                     data = data.replace(
                         "//extension-settings",
                         'window["VSC_MODE"] = true;' +
-                            'window["VSC_URI"] = "' +
-                            decodeURIComponent(this.uri.toString()) +
-                            '";'
+                        'window["VSC_URI"] = "' +
+                        decodeURIComponent(this.uri.toString()) +
+                        '";'
                     );
                     data = data.replace(/src="/g, 'src="' + urlPrefix);
                     data = data.replace(/href="/g, 'href="' + urlPrefix);
@@ -184,7 +182,7 @@ export function activate(context: vscode.ExtensionContext) {
                     { allowScripts: true, allowSvgs: true }
                 )
                 .then(
-                    success => {},
+                    success => { },
                     reason => {
                         vscode.window.showErrorMessage(reason);
                     }
