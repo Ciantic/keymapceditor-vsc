@@ -2,7 +2,7 @@
     "name": "keymapceditor-vsc",
     "displayName": "KeymapCEditor - keymap.c viewer and editor",
     "description": "Edit and preview your QMK Firmware keymap.c files using a GUI.",
-    "version": "0.7.3",
+    "version": "0.7.4",
     "publisher": "Ciantic",
     "license": "MIT",
     "icon": "images/1999calleditwantsitsiconback.png",
@@ -23,7 +23,7 @@
         "Other"
     ],
     "engines": {
-        "vscode": "^1.23.0"
+        "vscode": "^1.31.1"
     },
     "activationEvents": [
         "onCommand:keymapceditor.showKeymapCEditor"
@@ -46,7 +46,7 @@
         },
         "configuration": {
             "type": "object",
-            "title": "Markdown",
+            "title": "KeymapCEditor",
             "order": 20,
             "properties": {
                 "keymapceditor._urlPrefix": {
@@ -69,8 +69,8 @@
         "@types/node": "*",
         "ncp": "^2.0.0",
         "rimraf": "^2.6.2",
-        "typescript": "^2.9.1",
-        "vscode": "^1.1.18"
+        "typescript": "^3.3.3333",
+        "vscode": "^1.1.30"
     },
     "__metadata": {
         "id": "f754d8fa-f997-4887-bbae-ea7ca05db557",

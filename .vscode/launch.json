@@ -13,7 +13,6 @@
             "stopOnEntry": false,
             "sourceMaps": true,
             "outFiles": ["${workspaceRoot}/out/src/**/*.js"],
-            "preLaunchTask": "npm",
             "env": {
                 "NODE_ENV": "development"
             }
@@ -29,8 +28,7 @@
             ],
             "stopOnEntry": false,
             "sourceMaps": true,
-            "outFiles": ["${workspaceRoot}/out/test/**/*.js"],
-            "preLaunchTask": "npm"
+            "outFiles": ["${workspaceRoot}/out/test/**/*.js"]
         }
     ]
 }
