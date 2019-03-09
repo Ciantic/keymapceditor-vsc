@@ -151,17 +151,17 @@ export function activate(context: vscode.ExtensionContext) {
                         avoidResendCycleKeymapText = msg.keymap;
                         let uri = vscode.Uri.parse(msg.uri);
                         vscode.workspace.openTextDocument(uri).then(doc => {
-                            if (doc.getText() === msg.keymap) {
+                            let text = doc.getText();
+                            if (text === msg.keymap) {
                                 return;
                             }
                             let edit = new vscode.WorkspaceEdit();
-                            const lastLine = doc.lineAt(doc.lineCount - 2);
-                            const start = new vscode.Position(0, 0);
-                            const end = new vscode.Position(
-                                doc.lineCount - 1,
-                                lastLine.text.length
-                            );
-                            edit.replace(uri, new vscode.Range(start, end), msg.keymap);
+
+                            // Replace all text, see https://stackoverflow.com/a/50875520
+                            let invalidRange = new vscode.Range(0, 0, doc.lineCount, 0);
+                            let fullRange = doc.validateRange(invalidRange);
+                            edit.replace(uri, fullRange, msg.keymap);
+
                             vscode.workspace.applyEdit(edit);
                         });
                     }

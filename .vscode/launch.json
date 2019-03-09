@@ -15,7 +15,8 @@
             "outFiles": ["${workspaceRoot}/out/src/**/*.js"],
             "env": {
                 "NODE_ENV": "development"
-            }
+            },
+            "preLaunchTask": "build"
         },
         {
             "name": "Launch Tests",
@@ -28,7 +29,8 @@
             ],
             "stopOnEntry": false,
             "sourceMaps": true,
-            "outFiles": ["${workspaceRoot}/out/test/**/*.js"]
+            "outFiles": ["${workspaceRoot}/out/test/**/*.js"],
+            "preLaunchTask": "build"
         }
     ]
 }
