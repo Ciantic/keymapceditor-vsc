@@ -17,32 +17,32 @@ let panel: vscode.WebviewPanel | null = null;
 export function activate(context: vscode.ExtensionContext) {
     let config = KeymapCEditorConfiguration.getCurrentConfig();
     let avoidResendCycleKeymapText = "";
-    let throttleTimeout: NodeJS.Timer = null;
+    let throttleTimeout: NodeJS.Timer | null = null;
 
     const getWebViewHtml = (uri: vscode.Uri): Thenable<string> => {
         return new Promise((res, rej) => {
             let indexFile = context.asAbsolutePath("out/keymapceditor/index.html");
-            let urlPrefixUri = vscode.Uri.file(
-                path.join(context.extensionPath, "out", "keymapceditor")
-            );
+            // let urlPrefixUri = vscode.Uri.file(
+            //     path.join(context.extensionPath, "out", "keymapceditor")
+            // );
 
-            let urlPrefix = urlPrefixUri.with({ scheme: "vscode-resource" }).toString() + "/";
+            // let urlPrefix = urlPrefixUri.with({ scheme: "vscode-resource" }).toString() + "/";
 
             fs.readFile(indexFile, "UTF-8", (err, data) => {
                 if (err) {
                     rej(err);
                     return;
                 }
-                data = data.replace(
-                    "//extension-settings",
-                    'window["VSC_MODE"] = true;' +
-                        'window["VSC_URI"] = "' +
-                        uri.toString() +
-                        // decodeURIComponent(this.uri.toString()) + ###############
-                        '";'
-                );
-                data = data.replace(/src="/g, 'src="' + urlPrefix);
-                data = data.replace(/href="/g, 'href="' + urlPrefix);
+                // data = data.replace(
+                //     "//extension-settings",
+                //     'window["VSC_MODE"] = true;' +
+                //         'window["VSC_URI"] = "' +
+                //         uri.toString() +
+                //         // decodeURIComponent(this.uri.toString()) + ###############
+                //         '";'
+                // );
+                // data = data.replace(/src="/g, 'src="' + urlPrefix);
+                // data = data.replace(/href="/g, 'href="' + urlPrefix);
                 res(data);
             });
         });
@@ -95,7 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
             let uri = vscode.window.activeTextEditor.document.uri;
 
             context.subscriptions.push(
-                vscode.workspace.onDidChangeTextDocument(event => {
+                vscode.workspace.onDidChangeTextDocument((event) => {
                     if (event.document.uri.toString() === uri.toString()) {
                         sendKeymapToPreview(uri, event.document);
                     }
@@ -103,7 +103,7 @@ export function activate(context: vscode.ExtensionContext) {
             );
 
             context.subscriptions.push(
-                vscode.workspace.onDidOpenTextDocument(document => {
+                vscode.workspace.onDidOpenTextDocument((document) => {
                     if (document.uri.toString() === uri.toString()) {
                         sendKeymapToPreview(uri, document);
                     }
@@ -111,7 +111,7 @@ export function activate(context: vscode.ExtensionContext) {
             );
 
             context.subscriptions.push(
-                vscode.workspace.onDidCloseTextDocument(document => {
+                vscode.workspace.onDidCloseTextDocument((document) => {
                     if (document.uri.toString() === uri.toString()) {
                         // TODO: Should we inform the view somehow?
                         // sendKeymapToPreview(uri, "");
@@ -144,13 +144,13 @@ export function activate(context: vscode.ExtensionContext) {
                           }
                 ) => {
                     if (msg.command == "_keymapceditor.connectedPreview") {
-                        vscode.workspace.openTextDocument(vscode.Uri.parse(msg.uri)).then(f => {
+                        vscode.workspace.openTextDocument(vscode.Uri.parse(msg.uri)).then((f) => {
                             sendKeymapToPreview(uri, f, true);
                         });
                     } else if (msg.command == "_keymapceditor.keymapFromPreview") {
                         avoidResendCycleKeymapText = msg.keymap;
                         let uri = vscode.Uri.parse(msg.uri);
-                        vscode.workspace.openTextDocument(uri).then(doc => {
+                        vscode.workspace.openTextDocument(uri).then((doc) => {
                             let text = doc.getText();
                             if (text === msg.keymap) {
                                 return;
@@ -167,10 +167,29 @@ export function activate(context: vscode.ExtensionContext) {
                     }
                 }
             );
-            panel.onDidDispose(f => {
+            panel.onDidDispose((f) => {
                 panel = null;
             });
-            getWebViewHtml(uri).then(r => {
+            getWebViewHtml(uri).then((r) => {
+                if (!panel) {
+                    console.error("Panel not defined");
+                    return;
+                }
+                let urlPrefix = panel.webview.asWebviewUri(
+                    vscode.Uri.file(context.extensionPath + "/out/keymapceditor/")
+                );
+                r = r.replace(
+                    "//extension-settings",
+                    'window["VSC_MODE"] = true;' +
+                        'window["VSC_URI"] = "' +
+                        uri.toString() +
+                        // decodeURIComponent(this.uri.toString()) + ###############
+                        '";'
+                );
+                r = r.replace(/src="/g, 'src="' + urlPrefix);
+                r = r.replace(/href="/g, 'href="' + urlPrefix);
+                // r = r.replace(/src="/g, 'src="' + urlPrefix);
+                // r = r.replace(/href="/g, 'href="' + urlPrefix);
                 panel.webview.html = r;
             });
         })
